@@ -45,10 +45,9 @@ class iOSXIBDomParserViewModel(IOSBaseViewModel):
         self.classType = classType
 
     def parseNodeSubviews(self):
-        subviewNodeList = self.nodeElement.getElementsByTagName("subviews")  # subviews: xml.dom.minicompat.NodeList
-
-        # label
-        for subviewNode in subviewNodeList:
+        # subviewNodeList = self.nodeElement.getElementsByTagName("subviews")  # subviews: xml.dom.minicompat.NodeList
+        subviewNode = self.getFirstElement(self.nodeElement,IDomParserStr.key_subviews)
+        if subviewNode is not None:
             # print(subviewNode.toxml())
             childNodeList = subviewNode.childNodes
             # labelNodeList = subviewNode.getElementsByTagName("label") # label: xml.dom.minicompat.NodeList

@@ -9,7 +9,7 @@ import iOSTemplateFile.IOSXIBDomParser.iOSXIBDomParserStaticStr as IOSXIBDomStat
 
 class iOSXIBConstraintModel:
     nodeElement:xml.dom.minidom.Element
-    superItem: str
+    nodeId: str
     firstItem: str
     firstAttribute: str
     secondItem: str
@@ -19,8 +19,8 @@ class iOSXIBConstraintModel:
     priority: str
     symbolic: str
 
-    def __init__(self,nodeElement: xml.dom.minidom.Element,superItem:str):
-        self.superItem = superItem
+    def __init__(self,nodeElement: xml.dom.minidom.Element,nodeId:str):
+        self.nodeId = nodeId
         self.nodeElement = nodeElement
         self.reloadPropertys()
 

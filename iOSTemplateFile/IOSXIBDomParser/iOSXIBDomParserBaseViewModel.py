@@ -11,19 +11,6 @@ import iOSTemplateFile.IOSCreate.ios_view_base_data.ios_color as IColor
 from iOSTemplateFile.IOSCreate.ios_view_base_data.ios_convert_model import ios_convert_model as IConvertModel
 from iOSTemplateFile.IOSXIBDomParser.iOSXIBConstraintModel import iOSXIBConstraintModel as IConstraintModel
 
-# def parse_xib(file_path):
-#     tree = ET.parse(file_path)
-#     root = tree.getroot()
-#     # Find all subview elements
-#     subviews = root.find(".//view/*")
-#     print(type(subviews))
-#     # Loop through the subviews and print their IDs
-#     for subview in subviews:
-#         subview_id = subview.get("id")
-#         print(subview_id)
-#
-# import iOSTemplateFile.IOSXIBDomParser.iOSXIBConstraintParser as iOSXIBConstraintParser
-
 class iOSXIBDomParserBaseViewModel:
     nodeElement: xml.dom.minidom.Element
 
@@ -45,10 +32,12 @@ class iOSXIBDomParserBaseViewModel:
 
         self.nodeElement = nodeElement
         self.resetProperty()
-        print(type(nodeElement))
-        self.parseNodeSubviews()
+        # print(type(nodeElement))
         self.parseBasePropertys()
+        self.parseNodeSubviews()
+        self.parseNodeConstrains()
         self.parseNodeElement()
+
 
     def resetProperty(self):
         self.name = ''
@@ -75,8 +64,6 @@ class iOSXIBDomParserBaseViewModel:
         self.parseUserDefinedRuntimeBorderAttributesProperty()
         #user custom class
         self._private_parseClassTypeProperty()
-        self.parseNodeConstrains()
-        print('')
 
     # setProperty: NodeId
     def parseNodeIdProperty(self):
@@ -105,7 +92,7 @@ class iOSXIBDomParserBaseViewModel:
             # print(node.toxml())
             attributeList = self.getElements(node,IDomParserStr.key_userDefinedRuntimeAttribute)
             for attri in attributeList:
-                print(attri.toxml())
+                # print(attri.toxml())
                 keyPath = self.getElementAttributeValue(attri,IDomParserStr.key_keyPath)
                 value = self.getElementAttributeValue(attri,IDomParserStr.key_value)
                 if (IStaticStr.str_is_empty(value)):
@@ -135,14 +122,14 @@ class iOSXIBDomParserBaseViewModel:
                 self.cornerRadius = model.value
 
     def reloadProperty(self,
-                 name: str,
-                 classType:str,
-                 nodeId: str,
-                 subviews: dict,  # id : iOSXIBDomParserModel
-                 backgroundColor: colorsys,  # color
-                 borderColor: colorsys,
-                 borderWidth: float,
-                 cornerRadius: float):
+                       name: str,
+                       classType:str,
+                       nodeId: str,
+                       subviews: dict,  # id : iOSXIBDomParserModel
+                       backgroundColor: colorsys,  # color
+                       borderColor: colorsys,
+                       borderWidth: float,
+                       cornerRadius: float):
         self.name = name
         self.nodeId = nodeId
         self.subviews = subviews
@@ -171,17 +158,29 @@ class iOSXIBDomParserBaseViewModel:
         constraintsArray:xml.dom.minicompat.NodeList = self.getElements(self.nodeElement,IDomParserStr.key_constraints)
         if (constraintsArray is None):
             return
-        for constraintListNode in constraintsArray:
-            constraintList = self.getElements(constraintListNode,IDomParserStr.key_constraint)
-            for constraint in constraintList:
-                constraintModel: IConstraintModel = IConstraintModel(constraint,self.nodeId)
-                viewModel: iOSXIBDomParserBaseViewModel = self.subviews.get(constraintModel.secondItem,None)
-                if (IStaticStr.str_is_empty(constraintModel.id) is True):
-                    continue
-                if (viewModel is None):
-                    self.constraints[constraintModel.id] = constraintModel
-                    continue
-                viewModel.constraints[constraintModel.id] = constraintModel
+        if self.nodeId == 'iN0-l3-epB':
+            print()
+
+        if constraintsArray.length == 0:
+            return
+
+        constraintListNode = constraintsArray[-1]
+
+        if constraintListNode is None:
+            return
+
+        constraintList = self.getElements(constraintListNode, IDomParserStr.key_constraint)
+        for constraint in constraintList:
+            constraintModel: IConstraintModel = IConstraintModel(constraint, self.nodeId)
+            viewModel: iOSXIBDomParserBaseViewModel = self.subviews.get(constraintModel.firstItem, None)
+            if viewModel is None:
+                viewModel: iOSXIBDomParserBaseViewModel = self.subviews.get(constraintModel.secondItem, None)
+            if (IStaticStr.str_is_empty(constraintModel.id) is True):
+                continue
+            if (viewModel is None):
+                self.constraints[constraintModel.id] = constraintModel
+                continue
+            viewModel.constraints[constraintModel.id] = constraintModel
 
     def parseClassTypeProperty(self) -> str:
         return IDomParserStr.key_UIView
@@ -193,6 +192,12 @@ class iOSXIBDomParserBaseViewModel:
         if (elements is xml.dom.minicompat.NodeList == False):
             return None
         return elements
+
+    def getFirstElement(self,element: xml.dom.minidom.Element,key:str) -> xml.dom.minidom.Element:
+        list = self.getElements(element,key)
+        if list.length > 0:
+            return list[0]
+        return None
 
     def getElementAttributeValue(self, element: xml.dom.minidom.Element, key: str) -> xml.dom.minidom.Element:
         if (element is xml.dom.minidom.Element == False):
