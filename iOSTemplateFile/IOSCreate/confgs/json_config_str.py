@@ -7,33 +7,33 @@ json_config_str_demo = '''
 	"template_userNameKey": "李鹏跃",
 	"template_nickNameKey": "lpy",
 	
-	"ViewName": "ZRFastReserveDetailHoseCardCell",
-    "ViewModelName": "ZRFastReserveDetailHoseCardViewModel",
-    "BaseViewModelName": "ZRFastReserveDetailBaseViewModel",
-    "DataSouceName":"viewModel",
+	"viewName": "ZRFastReserveDetailHoseCardCell",
+    "viewModelName": "ZRFastReserveDetailHoseCardViewModel",
+    "baseViewModelName": "ZRFastReserveDetailBaseViewModel",
+    "dataSouceName":"viewModel",
     
-    "TemplateViewName": "iOSTemplateTableViewCell",
-    "TemplateBaseViewName": "ZRRentBaseTableViewCell",
-    "TemplateViewModelName": "iOSTemplateViewModel",
-    "TemplateTableBaseViewModelName": "iOSTemplateTableBaseViewModel",
-    "TemplateViewPath": "/Users/lp1/Desktop/pythonProject/iOSTemplateFile/iOSTemplate",
-    "TemplateViewModelPath":"/Users/lp1/Desktop/pythonProject/iOSTemplateFile/iOSTemplate",
+    "templateViewName": "iOSTemplateTableViewCell",
+    "templateBaseViewName": "ZRRentBaseTableViewCell",
+    "templateViewModelName": "iOSTemplateViewModel",
+    "templateBaseViewModelName": "iOSTemplateTableBaseViewModel",
+    "templateViewPath": "/Users/lp1/Desktop/pythonProject/iOSTemplateFile/iOSTemplate",
+    "templateViewModelPath":"/Users/lp1/Desktop/pythonProject/iOSTemplateFile/iOSTemplate",
     
-	"SavePath": "/Users/lp1/01我的文件/一些资料/code/2.Client_fork/1. demos/AVPlayer/AVPlayer/Demos/PythonMakeCode",
+	"savePath": "/Users/lp1/01我的文件/一些资料/code/2.Client_fork/1. demos/AVPlayer/AVPlayer/Demos/PythonMakeCode",
 	
-	"SubViews": [{
-			"PropertyType": "UILabel",
-			"PropertyName": "titleLabel",
+	"subViews": [{
+			"propertyType": "UILabel",
+			"propertyName": "titleLabel",
 			"APINameKey": "title",
 			
-			"BorderColor" : "0xFF00FF00",
-            "TextColor" : "#FF00FF00",
-            "BackgroundColor" : "bgColor",
-            "BorderWidth" : "12",
-            "CornerRadius" : "3",
-            "MasksToBounds" : "true",
+			"borderColor" : "0xFF00FF00",
+            "textColor" : "#FF00FF00",
+            "backgroundColor" : "bgColor",
+            "borderWidth" : "12",
+            "cornerRadius" : "3",
+            "masksToBounds" : "true",
 			
-			"Constraints": {
+			"constraints": {
 				"Height": "100",
 				"Width": "300",
 				"Top": {
@@ -185,7 +185,7 @@ def json_config_str():
     "TemplateViewName":"iOSTemplateTableViewCell",
     "TemplateBaseViewName":"ZRRentBaseTableViewCell",
     "TemplateViewModelName":"iOSTemplateViewModel",
-    "TemplateTableBaseViewModelName":"iOSTemplateTableBaseViewModel",
+    "templateBaseViewModelName":"iOSTemplateTableBaseViewModel",
     "TemplateViewPath":"/Users/lp1/Desktop/pythonProject/iOSTemplateFile/iOSTemplate",
     "TemplateViewModelPath":"/Users/lp1/Desktop/pythonProject/iOSTemplateFile/iOSTemplate",
     "SavePath":"/Users/lp1/01我的文件/一些资料/code/2.Client_fork/1. demos/AVPlayer/AVPlayer/Demos/PythonMakeCode",
@@ -423,3 +423,26 @@ def mergeMap(map1:dict,map2:dict) -> dict:
             result[key] = value
     result = flattenMap(result)
     return result
+
+'''
+
+{
+    "template_projectNameKey": "生成View",
+    "template_userNameKey": "李鹏跃",
+    "template_nickNameKey": "lpy",
+
+    "baseViewModelName": "viewModel",
+    "dataSouceName": "viewModel",
+
+    "templateViewName": "iOSTemplateTableViewCell",
+    "templateBaseViewName": "ZRRentBaseTableViewCell",
+    "templateViewModelName": "iOSTemplateViewModel",
+    "templateBaseViewModelName": "iOSTemplateBaseViewModel",
+    "templateViewPath": "/Users/lp1/Desktop/pythonProject/iOSTemplateFile/iOSTemplate",
+    "templateViewModelPath": "/Users/lp1/Desktop/pythonProject/iOSTemplateFile/iOSTemplate",
+
+    "savePath": "/Users/lp1/01我的文件/一些资料/code/2.Client_fork/1. demos/AVPlayer/AVPlayer/Demos/PythonMakeCode"
+
+}
+
+'''
