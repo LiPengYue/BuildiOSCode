@@ -4,7 +4,7 @@
 from xml.dom.minidom import parse
 import xml.dom.minidom
 from iOSTemplateFile.IOSXIBDomParser.iOSXIBDomParserLabelModel import iOSXIBDomParserLabelModel as IOSLabelModel
-import iOSTemplateFile.IOSCreate.ios_view_base_data.ios_convert_model as IConvertModel
+from iOSTemplateFile.IOSXIBDomParser.iOSXIBDomParserImageViewModel import iOSXIBDomParserImageViewModel as IOSImageViewModel
 import iOSTemplateFile.IOSCreate.ios_static_string as IStaticStr
 import iOSTemplateFile.IOSXIBDomParser.iOSXIBDomParserStaticStr  as IDomParserStr
 from iOSTemplateFile.IOSXIBDomParser.iOSXIBDomParserBaseViewModel import iOSXIBDomParserBaseViewModel as IOSBaseViewModel
@@ -58,7 +58,7 @@ class iOSXIBDomParserViewModel(IOSBaseViewModel):
                 self.createSubviewWithNode(childNode)
 
 
-        print(self.subviews)
+        # print(self.subviews)
 
     def parseNodeElement(self):
       pass
@@ -73,6 +73,9 @@ class iOSXIBDomParserViewModel(IOSBaseViewModel):
 
         if (nodeName == IDomParserStr.key_view):
             node = iOSXIBDomParserViewModel(nodeElement=childNode)
+
+        if (nodeName == IDomParserStr.key_imageView):
+            node = IOSImageViewModel(nodeElement=childNode)
 
         childNodeId = node.nodeId
 

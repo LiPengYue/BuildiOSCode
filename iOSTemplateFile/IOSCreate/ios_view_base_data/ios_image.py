@@ -13,4 +13,4 @@ class ios_image:
     def image(self):
         if IStatic.str_is_empty(self.image_name):
             return ''
-        return f'[ZRImage imageNamed:@"{self.image_name}"]'
+        return f'[UIImage imageNamed:@"{self.image_name}"]'

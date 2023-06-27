@@ -1,13 +1,10 @@
 # -*- mode: python ; coding: utf-8 -*-
 
-import itertools
 import json
 import iOSTemplateFile.IOSCreate.ios_class_create as ClasCreate
 import iOSTemplateFile.IOSCreate.ios_static_string as IStatic
-import iOSTemplateFile.IOSTemplateRegulars as IOSTemplateRegulars
+import iOSTemplateFile.IOSCreate.IOSTemplateRegulars as IOSTemplateRegulars
 import iOSTemplateFile.IOSJsonToModel.ios_json_to_model_config as IJsonConfig
-
-from collections import ChainMap
 
 _MODEL_PREFIX = "modelNamePrefix"
 _MODEL_SUFFIX = "modelNameSuffix"
@@ -109,7 +106,7 @@ def convertJsonToModel(json_str):
     print('..........' + _JSON_TO_MODEL_DESCRIPtION + '..........')
     json_map = json.loads(json_str)
     json_map = flattenMap(json_map)
-    json_map = removeDuplication(json_map)
+    # json_map = removeDuplication(json_map)
     nick_name = json_map.get(IStatic.IOS_TEMPLATE_NickName)
     user_name = json_map.get(IStatic.IOS_TEMPLATE_UserName)
     project_name = json_map.get(IStatic.IOS_TEMPLATE_ProjectName)
@@ -282,12 +279,12 @@ if __name__ == '__main__':
     json_str_array = '''
 {
     "modelNameSuffix":"Model",
-    "modelNamePrefix":"ZRRent",
+    "modelNamePrefix":"Rent",
     "template_projectNameKey":"json转model",
     "template_userNameKey":"李鹏跃",
     "template_nickNameKey":"lpy",
     "rootModelName":"filter",
-    "baseModelName":"ZRBaseModel",
+    "baseModelName":"BaseModel",
     "modelSavePath":"/Users/lp1/Desktop/pythonProject/iOSTemplateFile",
     "modelData":{
   "data": {
@@ -311,7 +308,7 @@ if __name__ == '__main__':
           ]
         ],
         "area_order": 17.7,
-        "code": "BJZRGY0818201537_01",
+        "code": "BJGY0818201537_01",
         "inv_id": "480164",
         "photo_min_webp": "https://img.ziroom.com/pic/static/images/slist_1207/defaultPZZ/natie-loading.jpg_C_240_180_Q100.webp",
         "pic_group_id": "_cross_left",

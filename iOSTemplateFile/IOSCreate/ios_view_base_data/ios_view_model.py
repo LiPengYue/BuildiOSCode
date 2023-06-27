@@ -30,11 +30,9 @@ class ios_view_model:
         self.template_viewModelH_FileName = template_viewModelH_FileName
         self.template_viewModelM_FileName = template_viewModelM_FileName
 
-    def add_color_property_ifNeeded(self,color:str):
-        if IColor.is_net_api_color(color) == False:
-            return
-        color_property =  f'{IStatic.IOS_TEMPLATE_PROPERTY_copy} {IStatic.IOS_TEMPLATE_TYPE_NSString} *{color};'
-        self.__append_property(color_property)
+    def add_property_list(self, property_name_list: [str]):
+        for name in property_name_list:
+            self.add_property(name)
 
     def add_property(self,property_name:str):
         if IStatic.str_is_empty(property_name):

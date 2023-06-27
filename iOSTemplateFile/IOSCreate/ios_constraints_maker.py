@@ -15,115 +15,166 @@ Constraints_Space = 'Space'
 Constraints_Location = 'Location'
 _left = 'left'
 _right = 'right'
+_trailing = 'trailing'
+_leading = 'leading'
+
+
 _top = 'top'
 _bottom = 'bottom'
 
-class _ios_constraints_item:
+_str_make:str = 'make'
+_str_equalTo:str = 'equalTo'
+_str_lessThanOrEqual:str = 'lessThanOrEqual'
+_str_greaterThanOrEqualTo:str = 'greaterThanOrEqualTo'
 
-    constraints_view:str = ''
-    view = ''
-    space:str = ''
-    self_location:str
-    location:str
 
-    def _legal_location(cls,item_enum) -> bool:
-        return item_enum == 'left' or item_enum == 'top' or item_enum == 'bottom' or item_enum == 'right'
+class ios_constaint_item:
+    # constraints
 
-    def __init__(self,map:dict,view,self_location):
-        if isinstance(map,dict) == False:
-            return
-        self.constraints_view = map.get(Constraints_View)
-        self.space = map.get(Constraints_Space,'0')
-        self.location = map.get(Constraints_Location,'').lower()
-        self.view = view
-        self.self_location = self_location
+    constantResultStr:str = ''
 
-    def make_item_constraint(self):
-        consttaint_str = ''
+    viewId = ''
+    constraints = ''
+    constraint = ''
+    firstItemId = ''
+    firstItemName = ''
+    firstAttribute = ''
+    firstOriginAttribute = ''
+    secondItemId = ''
+    secondItemName = ''
+    secondAttribute = ''
+    secondOriginAttribute = ''
+    constant = ''
+    id = ''
+    priority = ''
+    symbolic = ''
+    relation = ''
 
-        if isinstance(self.constraints_view,str) and len(self.constraints_view) > 0:
-            consttaint_str = f'''make.{self.self_location}.equalTo(self.{self.constraints_view}'''
-            if self._legal_location(self.location):
-                consttaint_str += f'.mas_{self.location}'
-            consttaint_str += ')'
-            if isinstance(self.space,str) and len(self.space) > 0:
-                consttaint_str += f'.offset({self.space})'
+    # 定义修饰器
+    def getViewOwnerNameCallback(self, func):
+        self.getViewOwnerNameCallback_func = func
 
-        elif isinstance(self.space,str) and len(self.space) > 0:
-            consttaint_str = f'make.{self.self_location}.equalTo(@({self.space}))'
-            if  self._legal_location(self.location):
-                consttaint_str = f'make.{self.self_location}.equalTo(@(self.{self.view}.superView.mas_{self.location}).offset({self.space})'
+    def __init__(self,constaintMap:dict,viewId:str):
+        self.viewId = viewId
+        self.constraint = constaintMap.get(IStatic.IOS_TEMPLATE_JSON_Constraint, '')
+        self.relationOrigin = constaintMap.get(IStatic.IOS_TEMPLATE_JSON_Relation, '')
+        self.setupRelation()
+        self.firstItemId = constaintMap.get(IStatic.IOS_TEMPLATE_JSON_FirstItem, '')
+        self.firstOriginAttribute = constaintMap.get(IStatic.IOS_TEMPLATE_JSON_FirstAttribute, '')
+        self.firstAttribute = self.convertAttribute(self.firstOriginAttribute)
+        self.secondItemId = constaintMap.get(IStatic.IOS_TEMPLATE_JSON_SecondItem, '')
+        self.secondOriginAttribute = constaintMap.get(IStatic.IOS_TEMPLATE_JSON_SecondAttribute, '')
+        self.secondAttribute = self.convertAttribute(self.secondOriginAttribute)
+        self.constant = constaintMap.get(IStatic.IOS_TEMPLATE_JSON_Constant, '')
+        self.id = constaintMap.get(IStatic.IOS_TEMPLATE_JSON_Id, '')
+        self.priority = constaintMap.get(IStatic.IOS_TEMPLATE_JSON_Priority, '')
+        self.symbolic = constaintMap.get(IStatic.IOS_TEMPLATE_JSON_Symbolic, '')
 
-        if len(consttaint_str) > 0:
-            consttaint_str += ';'
-        return consttaint_str
+    def convertAttribute(self,attri:str) -> str:
+        if IStatic.str_is_empty(attri): return ''
+        if attri == _trailing: return _right
+        if attri == _leading: return _left
+        return attri
+
+    def setupRelation(self):
+        if IStatic.str_is_empty(self.relationOrigin):
+            self.relation = _str_equalTo
+        else:
+            self.relation = self.relationOrigin
+
+    def reloadProperty(self):
+        self.firstItemName = self.getViewOwnerNameCallback_func(self.firstItemId)
+        self.secondItemName = self.getViewOwnerNameCallback_func(self.secondItemId)
+        self.constantResultStr = self.makeConstraint()
+
+    def makeConstraint(self) -> str:
+        firstName = self.firstItemName
+        firstAttribute = self.firstAttribute
+        secondName = self.secondItemName
+        secondAttribute = self.secondAttribute
+        constantOrigin = self.constant
+        constantNum:float = 0.0
+        constant:str = ''
+        if IStatic.str_is_not_empty(constantOrigin) and len(constantOrigin) > 0:
+            constantNum = float(constantOrigin)
+            if firstAttribute == _right or firstAttribute == _bottom:
+                constantNum = -constantNum
+
+        if round(constantNum) == constantNum:
+            constant = f'{round(constantNum)}'
+        else:
+            constant = f'{constantNum}'
+
+        if self.secondItemId == self.viewId and IStatic.str_is_not_empty(self.viewId):
+            firstName = self.secondItemName
+            firstAttribute = self.secondAttribute
+            secondName = self.firstItemName
+            secondAttribute = self.firstAttribute
+
+        constantResultStr = _str_make + '.'
+
+        if IStatic.str_is_not_empty(firstAttribute):
+            constantResultStr += firstAttribute + '.'
+
+        constantResultStr += self.relation + '('
+        if IStatic.str_is_not_empty(secondName) and IStatic.str_is_not_empty(self.secondItemId) and IStatic.str_is_not_empty(self.firstItemId):
+            constantResultStr += secondName
+            if IStatic.str_is_not_empty(secondAttribute):
+                constantResultStr += f'.mas_{secondAttribute})'
+            if constantNum != 0:
+                constantResultStr += f'.offset({constant})'
+        else:
+            if constantNum != 0:
+                constantResultStr += f'@({constant}))'
+
+        if IStatic.str_is_not_empty(self.priority):
+            constantResultStr += f'.priority({self.priority})'
+
+        constantResultStr += ';'
+        return constantResultStr
+
 
 class ios_constraints_maker:
-    top: _ios_constraints_item = None
-    left: _ios_constraints_item = None
-    bottom: _ios_constraints_item = None
-    right: _ios_constraints_item = None
+
     height: str = ''
     width: str = ''
-    map: dict = None
+    viewMap: dict = None
+    viewId: str = ''
+    viewName:str = ''
+    constaintResultList:[str] = []
+    constaintResultStr: str = ''
 
-    def __init__(self,map):
-        self.map = map
-        self.reload_propertys(map)
+    def __init__(self,viewMap:dict):
+        self.viewMap = viewMap
 
-    def reload_propertys(self,map:dict):
-        self.view_name = map.get(IStatic.IOS_TEMPLATE_JSON_PropertyNameKey)
-        constraint_map: dict = map.get(Constraints_info)
+    # 定义修饰器
+    def getViewOwnerNameCallback(self, func):
+        self.getViewOwnerNameCallback_func = func
 
-        if isinstance(constraint_map,dict) == False:
+    def reload_propertys(self):
+
+        self.viewId = self.viewMap.get(IStatic.IOS_TEMPLATE_JSON_NodeId)
+        self.viewName = self.getViewOwnerNameCallback_func(self.viewId)
+        constaintList = self.viewMap.get(IStatic.IOS_TEMPLATE_JSON_Constraints,{})
+
+        if len(constaintList) == 0:
             return
-        top_map: dict = constraint_map.get(Constraints_Top)
-        left_map: dict = constraint_map.get(Constraints_Left)
-        bottom_map: dict = constraint_map.get(Constraints_Bottom)
-        right_map: dict = constraint_map.get(Constraints_Right)
 
-        self.top = _ios_constraints_item(top_map,self.view_name,_top)
-        self.left = _ios_constraints_item(left_map, self.view_name,_left)
-        self.bottom = _ios_constraints_item(bottom_map, self.view_name,_bottom)
-        self.right = _ios_constraints_item(right_map, self.view_name,_right)
-        self.width = constraint_map.get(Constraints_Width)
-        self.height = constraint_map.get(Constraints_Height)
+        constaintResultList = []
+        header = f'[{self.viewName} mas_makeConstraints:^(MASConstraintMaker *make) {{'
+        constaintResultList.append(header)
 
-    def append_constraints(self,constraint:str,constraint_list:list):
-        if len(constraint) == 0:
-            return
-        constraint_list.append(constraint)
+        for key, constaintMap in constaintList.items():
+            item = ios_constaint_item(constaintMap,self.viewId)
+            @item.getViewOwnerNameCallback
+            def ios_constaint_item_callback(viewId:str):
+                return self.getViewOwnerNameCallback_func(viewId)
+            item.reloadProperty()
+            constaintResultList.append(item.constantResultStr)
 
-    def makeForMap(self):
+        footer = '}];'
+        constaintResultList.append(footer)
 
-        constraintResultList:[str] = []
+        self.constaintResultList = constaintResultList
+        self.constaintResultStr = '\n'.join(constaintResultList)
 
-        constraintList: [str] = []
-        #top
-        if self.top is not None:
-            self.append_constraints(self.top.make_item_constraint(),constraintList)
-
-        #left
-        if self.left is not None:
-            self.append_constraints(self.left.make_item_constraint(),constraintList)
-
-        #bottom
-        if self.bottom is not None:
-            self.append_constraints(self.bottom.make_item_constraint(),constraintList)
-
-        #right
-        if self.right is not None:
-            self.append_constraints(self.right.make_item_constraint(),constraintList)
-
-        if isinstance(self.height,str) and len(self.height) > 0:
-            constraintList.append(f'make.height.equalTo(@({self.height}));')
-
-        if isinstance(self.width,str) and len(self.height) > 0:
-            constraintList.append(f'make.width.equalTo(@({self.width}));')
-
-        if len(constraintList) > 0:
-            constraintResultList.append(f'\n[self.{self.view_name} mas_makeConstraints: ^(MASConstraintMaker * make) {{')
-            constraintResultList += constraintList
-            constraintResultList.append('}];')
-
-        return '\n'.join(constraintResultList)

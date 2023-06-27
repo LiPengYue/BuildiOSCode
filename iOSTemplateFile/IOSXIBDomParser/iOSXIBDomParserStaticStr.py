@@ -15,6 +15,7 @@ key_constant = "constant"
 key_id = 'id'
 key_priority = 'priority'
 key_symbolic = 'symbolic'
+key_relation = 'relation'
 
 #user custom
 key_userDefinedRuntimeAttributes = "userDefinedRuntimeAttributes"
@@ -26,6 +27,11 @@ key_keyPath = 'keyPath'
 key_value = 'value'
 key_type = 'type'
 key_real = 'real'
+
+key_fontDescription = "fontDescription"
+key_name = "name"
+key_family = "family"
+key_pointSize = "pointSize"
 
 key_color = "color"
 key_color_red = "red"
@@ -39,12 +45,21 @@ key_borderColor = 'borderColor'
 key_borderWidth = 'borderWidth'
 key_cornerRadius = 'cornerRadius'
 
+key_APINameKey = "APINameKey"
+key_textColorAPI = "textColorAPI"
+key_textAPI = "textAPI"
+key_imageAPI = "imageAPI"
+key_bgColorAPI = 'bgColorAPI'
+
+key_propertyName = "propertyName"
 key_viewModel = "viewModel"
 key_label = 'label'
 key_view = 'view'
+key_imageView = 'imageView'
 key_button = 'button'
 key_UIView = 'UIView'
 key_UILabel = 'UILabel'
+key_UIImageView = 'UIImageView'
 key_UIButton = 'UIButton'
 key_subviews = 'subviews'
 

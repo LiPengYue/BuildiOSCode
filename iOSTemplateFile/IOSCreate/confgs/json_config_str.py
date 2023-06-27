@@ -7,13 +7,13 @@ json_config_str_demo = '''
 	"template_userNameKey": "李鹏跃",
 	"template_nickNameKey": "lpy",
 	
-	"viewName": "ZRFastReserveDetailHoseCardCell",
-    "viewModelName": "ZRFastReserveDetailHoseCardViewModel",
-    "baseViewModelName": "ZRFastReserveDetailBaseViewModel",
+	"viewName": "FastReserveDetailHoseCardCell",
+    "viewModelName": "FastReserveDetailHoseCardViewModel",
+    "baseViewModelName": "FastReserveDetailBaseViewModel",
     "dataSouceName":"viewModel",
     
     "templateViewName": "iOSTemplateTableViewCell",
-    "templateBaseViewName": "ZRRentBaseTableViewCell",
+    "templateBaseViewName": "RentBaseTableViewCell",
     "templateViewModelName": "iOSTemplateViewModel",
     "templateBaseViewModelName": "iOSTemplateTableBaseViewModel",
     "templateViewPath": "/Users/lp1/Desktop/pythonProject/iOSTemplateFile/iOSTemplate",
@@ -78,7 +78,7 @@ json_config_str_demo = '''
 		}
 		,
 		{
-			"PropertyType": "ZRSVGATabbarButtonView",
+			"PropertyType": "SVGATabbarButtonView",
 			"PropertyName": "customeLabel",
 			"APINameKey": "subtitle",
 
@@ -106,7 +106,7 @@ json_config_str_demo = '''
 			}
 		},
 		{
-			"PropertyType": "ZRSVGATabbarButtonView",
+			"PropertyType": "SVGATabbarButtonView",
 			"PropertyName": "baseCustomeLabel",
 			"APINameKey": "subtitle",
 
@@ -178,12 +178,12 @@ def json_config_str():
     "template_projectNameKey":"生成View",
     "template_userNameKey":"李鹏跃",
     "template_nickNameKey":"lpy",
-    "ViewName":"ZRFastReserveDetailHoseCardCell",
-    "ViewModelName":"ZRFastReserveDetailHoseCardViewModel",
-    "BaseViewModelName":"ZRFastReserveDetailBaseViewModel",
+    "ViewName":"FastReserveDetailHoseCardCell",
+    "ViewModelName":"FastReserveDetailHoseCardViewModel",
+    "BaseViewModelName":"FastReserveDetailBaseViewModel",
     "DataSouceName":"viewModel",
     "TemplateViewName":"iOSTemplateTableViewCell",
-    "TemplateBaseViewName":"ZRRentBaseTableViewCell",
+    "TemplateBaseViewName":"RentBaseTableViewCell",
     "TemplateViewModelName":"iOSTemplateViewModel",
     "templateBaseViewModelName":"iOSTemplateTableBaseViewModel",
     "TemplateViewPath":"/Users/lp1/Desktop/pythonProject/iOSTemplateFile/iOSTemplate",
@@ -435,7 +435,7 @@ def mergeMap(map1:dict,map2:dict) -> dict:
     "dataSouceName": "viewModel",
 
     "templateViewName": "iOSTemplateTableViewCell",
-    "templateBaseViewName": "ZRRentBaseTableViewCell",
+    "templateBaseViewName": "RentBaseTableViewCell",
     "templateViewModelName": "iOSTemplateViewModel",
     "templateBaseViewModelName": "iOSTemplateBaseViewModel",
     "templateViewPath": "/Users/lp1/Desktop/pythonProject/iOSTemplateFile/iOSTemplate",

@@ -1,5 +1,5 @@
 import re
-
+import weakref
 from iOSTemplateFile.IOSCreate.ios_view_base_data.ios_color import ios_color as IColor
 from iOSTemplateFile.IOSCreate import ios_static_string as IStatic
 
@@ -12,53 +12,74 @@ class ios_base_view:
     # ViewModel所有者指针的指针名
     datasource_holder_pointer_name: str = 'self'
 
+    #唯一标识
+    id: str = ''
     #属性名
-    name:str = ''
+    propertyName:str = ''
     #self 视图 类型
     type: str = ''
     #self所有者指针的指针名
     self_holder_pointer_name:str = 'self'
 
-    #viewModel的属性
+    #self的基础属性
     background_color: str = ''
     border_color: str = ''
     border_width: str = ''
     corner_radius: str = ''
     masks_to_bounds: bool = False
 
+    #viewModel API
+    bgColorAPI: str = ''
+
+    api_image: str = ''
+
+    jsonDic: dict = {}
+
+    subviews:list = []
+    api_name:str = ''
+    api_name_list: [str] = []
+    superView:weakref = None
+
     def __init__(self,
                  self_holder_pointer_name:str,
-                 type:str,
-                 name:str,
                  datasource:str,
                  datasource_holder_pointer_name:str,
-                 background_color: str = '',
-                 border_color: str = '',
-                 border_width: str = '',
-                 corner_radius: str = '',
-                 masks_to_bounds: bool = False
+                 jsonDic:dict
                  ):
 
-        self.name = name
-        self.type = type
         self.datasource = datasource
         self.self_holder_pointer_name = self_holder_pointer_name
         self.datasource_holder_pointer_name = datasource_holder_pointer_name
 
-        self.background_color = background_color
-        self.border_color = border_color
-        self.border_width = border_width
-        self.corner_radius = corner_radius
-        self.masks_to_bounds = masks_to_bounds
+        self.jsonDic = jsonDic
+        self.__reloadPropertys()
+        self.api_name_list = self.__apiNames()
+
+    def __reloadPropertys(self):
+        self.id = self.jsonDic[IStatic.IOS_TEMPLATE_JSON_NodeId]
+        if IStatic.str_is_empty(self.id):
+            self.id = self.jsonDic[IStatic.IOS_TEMPLATE_JSON_NodeId]
+        self.type = self.jsonDic[IStatic.IOS_TEMPLATE_JSON_PropertyTypeKey]
+        self.propertyName = self.jsonDic[IStatic.IOS_TEMPLATE_JSON_PropertyNameKey]
+        self.background_color = self.jsonDic.get(IStatic.IOS_TEMPLATE_JSON_BackgroundColorKey, '')
+        self.border_color = self.jsonDic.get(IStatic.IOS_TEMPLATE_JSON_BorderColorKey, '')
+        self.border_width  = self.jsonDic.get(IStatic.IOS_TEMPLATE_JSON_BorderWidthKey, '')
+        self.corner_radius = self.jsonDic.get(IStatic.IOS_TEMPLATE_JSON_CornerRadiusKey, '')
+        self.masks_to_bounds = self.jsonDic.get(IStatic.IOS_TEMPLATE_JSON_MasksToBoundsKey, '')
+        self.api_name = self.jsonDic.get(IStatic.IOS_TEMPLATE_JSON_APINameKey, '')
+        self.reloadPropertys()
+
+    def reloadPropertys(self):
+        pass
 
     def property(self):
-        return f'@property (nonatomic,strong) {self.type} *{self.name};'
+        return f'@property (nonatomic,strong) {self.type} *{self.propertyName};'
 
     def self_getter(self):
-        return f'''{self.self_holder_pointer_name}.{self.name}'''
+        return f'''{self.self_holder_pointer_name}.{self.propertyName}'''
 
     def self_ivr_getter(self):
-        return f'''_{self.name}'''
+        return f'''_{self.propertyName}'''
 
     def datasource_getter(self):
         return f'{self.datasource_holder_pointer_name}.{self.datasource}'
@@ -68,7 +89,7 @@ class ios_base_view:
 
         if IStatic.str_is_empty(superview_name) == False:
             str += ('.'+superview_name)
-        str += f' addSubview:self.{self.name}];'
+        str += f' addSubview:self.{self.propertyName}];'
         return str
 
     def import_class_str(self,did_imporrt_str:str='') -> str:
@@ -83,14 +104,13 @@ class ios_base_view:
     # lazys
     def lazy_load(self):
         str = f'''
-         - ({self.type} *) {self.name} {{
-             if (!_{self.name}) {{
-                 _{self.name} = [[{self.type} alloc]init];
+         - ({self.type} *) {self.propertyName} {{
+             if (!_{self.propertyName}) {{
+                 _{self.propertyName} = [[{self.type} alloc]init];
                  {IOS_Regular_Lazy_set}
              }}
-             return _{self.name};
-         }}
-             '''
+             return _{self.propertyName};
+         }}'''
         re_regular_Lazy_set = re.search(IOS_Regular_Lazy_set, str, flags=re.DOTALL)
         front = str[:re_regular_Lazy_set.start()]
         last = str[re_regular_Lazy_set.end():]
@@ -111,18 +131,6 @@ class ios_base_view:
             {self.self_ivr_getter()}.backgroundColor = {color.color()};
             '''.lstrip()
 
-    def set_backgroundColor(self):
-        if IStatic.str_is_empty(self.background_color):
-            return ''
-        color = IColor(self.background_color,
-                       datasource_holder=self.datasource_holder_pointer_name,
-                       datasource=self.datasource)
-        if color.is_net_api_color() == False:
-            return ''
-        return f'''
-               {self.self_getter()}.backgroundColor = {color.color()};
-               '''.lstrip()
-
     def lazy_set_border_color(self):
         if IStatic.str_is_empty(self.border_color):
             return ''
@@ -138,7 +146,9 @@ class ios_base_view:
     def lazy_set_border_width(self):
         if isinstance(self.border_width,str) and  IStatic.str_is_empty(self.border_width):
             return ''
-        if self.border_width is None:
+        if IStatic.str_is_empty(self.border_width):
+            return ''
+        if float(self.border_width) <= 0:
             return ''
         return f'''
         {self.self_ivr_getter()}.layer.borderWidth = {self.border_width};
@@ -147,7 +157,9 @@ class ios_base_view:
     def lazy_set_corner_radius(self):
         if isinstance(self.corner_radius,str) and IStatic.str_is_empty(self.corner_radius):
             return ''
-        if self.corner_radius is None:
+        if IStatic.str_is_empty(self.corner_radius):
+            return ''
+        if float(self.corner_radius) <= 0:
             return ''
         return f'''
         {self.self_ivr_getter()}.layer.cornerRadius = {self.corner_radius};
@@ -158,11 +170,13 @@ class ios_base_view:
             return ''
         if self.masks_to_bounds is None:
             return ''
+        if float(self.masks_to_bounds) <= 0:
+            return ''
         return f'''
         {self.self_ivr_getter()}.layer.masksToBounds = {self.masks_to_bounds};
         '''.lstrip()
 
-    def append_content(self, constraint: str, constraint_list: list):
+    def array_append_content(self, constraint: str, constraint_list: list):
         constraint = constraint.strip()
         if IStatic.str_is_empty(constraint):
             return
@@ -193,36 +207,71 @@ class ios_base_view:
         masks_to_bounds = self.lazy_set_masks_to_bounds()
         list:[str] = []
 
-        self.append_content(backgroundColor, list)
-        self.append_content(border_color, list)
-        self.append_content(border_width, list)
-        self.append_content(corner_radius, list)
-        self.append_content(masks_to_bounds, list)
+        self.array_append_content(backgroundColor, list)
+        self.array_append_content(border_color, list)
+        self.array_append_content(border_width, list)
+        self.array_append_content(corner_radius, list)
+        self.array_append_content(masks_to_bounds, list)
         # print(list)
         return list
 
     def append_lazy_load_set_propertys(self) -> [str]:
         return []
 
-    def propertys_set_data_str(self):
-        list = self.__set_base_property_data()
+    # -- API
+    def apiNames(self) -> [str]:
+        pass
+
+    def __apiNames(self) -> [str]:
+        arr = []
+        self.api_name = self.jsonDic.get(IStatic.IOS_TEMPLATE_JSON_APINameKey, '')
+        self.bgColorAPI = self.jsonDic.get(IStatic.IOS_TEMPLATE_JSON_bgColorAPI, '')
+
+        self.appendAPINameStrIfNotEmpty(arr, IStatic.IOS_TEMPLATE_JSON_APINameKey)
+        self.appendAPINameStrIfNotEmpty(arr, IStatic.IOS_TEMPLATE_JSON_bgColorAPI)
+
+        moreAPINames = self.apiNames()
+        if isinstance(moreAPINames, list):
+            arr += moreAPINames
+        return arr
+
+    def appendAPINameStrIfNotEmpty(self, arr: [], key: str):
+        if IStatic.str_is_empty(key):
+            return
+        name = self.jsonDic.get(key, '')
+        if IStatic.str_is_empty(name):
+            return
+        arr.append(name)
+
+    #api set
+    def api_set_codes(self):
+        list = self.__api_set_base_property_data()
         str = ''
         if len(list) > 0:
-            str += f'// {self.name}\n'
-
-        for value in list:
-            if IStatic.str_is_empty(value):
-                continue
-            value_str:str = value
-            str += (value_str.lstrip() + '\n')
+            str += f'// {self.propertyName}{IStatic.IOS_TEMPLATE_char_newline}'
+        str += '\n'.join(list)
         return str
 
-    def __set_base_property_data(self) -> [str]:
-        background_color = self.set_backgroundColor()
+    def __api_set_base_property_data(self) -> [str]:
         list: [str] = []
-        self.append_content(background_color, list)
-        list += self.append_set_property_data()
+        background_color = self.api_set_backgroundColor()
+        self.array_append_content(background_color,list)
+        self.array_append_content(self.api_name, list)
+        list += self.api_set_append_property_datas()
         return list
 
-    def append_set_property_data(self) -> [str]:
+    def api_set_viewModelPropertyGetter(self,propertyName:str) -> str:
+        if IStatic.str_is_empty(propertyName):
+            return ''
+        return f'{self.datasource_getter()}.{propertyName}'
+
+    def api_set_backgroundColor(self):
+        if IStatic.str_is_empty(self.bgColorAPI):
+            return ''
+
+        return f'''
+               {self.self_getter()}.{IStatic.IOS_TEMPLATE_JSON_BackgroundColorKey} = {self.api_set_viewModelPropertyGetter(self.bgColorAPI)};
+               '''.lstrip()
+
+    def api_set_append_property_datas(self) -> [str]:
         return []

@@ -9,36 +9,31 @@ class ios_base_text(base_view):
     text_color:IColor
     title: str = ''
     text_alignment_name:str = ''
-    def __init__(self,
-                 self_holder_pointer_name: str,
-                 type: str,
-                 name: str,
-                 datasource: str,
-                 datasource_holder_pointer_name: str,
-                 background_color: str = '',
-                 border_color: str = '',
-                 border_width: str = '',
-                 corner_radius: str = '',
-                 masks_to_bounds: bool = False,
-                 title: str = '',
-                 font_family:str='',
-                 font_size:str='',
-                 text_color:str='',
-                 text_alignment_name = IStatic.IOS_TEMPLATE_NSTextAlignmentLeft
-                 ):
-        super().__init__(
-            self_holder_pointer_name=self_holder_pointer_name,
-            type=type,
-            name=name,
-            datasource=datasource,
-            datasource_holder_pointer_name=datasource_holder_pointer_name,
-            background_color=background_color,
-            border_color=border_color,
-            border_width=border_width,
-            corner_radius=corner_radius,
-            masks_to_bounds=masks_to_bounds,
-        )
-        self.title = title
-        self.font = IFont(font_family,font_size)
-        self.text_color = IColor(color=text_color,datasource=datasource,datasource_holder=datasource_holder_pointer_name)
-        self.text_alignment_name = text_alignment_name
+
+    #api
+    api_textColor: str = ''
+    api_text: str = ''
+
+    def reloadPropertys(self):
+        self.text_alignment_name = self.jsonDic.get(IStatic.IOS_TEMPLATE_JSON_TextAlignment,
+                                             IStatic.IOS_TEMPLATE_NSTextAlignmentLeft)
+        font_family = self.jsonDic.get(IStatic.IOS_TEMPLATE_JSON_FontFamily, '')
+        font_family_name = self.jsonDic.get(IStatic.IOS_TEMPLATE_JSON_FontFamilyName, '')
+        font_size = self.jsonDic.get(IStatic.IOS_TEMPLATE_JSON_FontSize, '')
+        text_color = self.jsonDic.get(IStatic.IOS_TEMPLATE_JSON_TextColor, '')
+        self.title = self.jsonDic.get(IStatic.IOS_TEMPLATE_JSON_textAPI, '')
+
+        self.font = IFont(font_family,font_family_name, font_size)
+        self.text_color = IColor(color=text_color,
+                                 datasource=self.datasource,
+                                 datasource_holder=self.datasource_holder_pointer_name)
+
+    def apiNames(self) -> [str]:
+        arr:[str] = []
+        self.api_textColor = self.jsonDic.get(IStatic.IOS_TEMPLATE_JSON_textColorAPI, '')
+        self.api_text = self.jsonDic.get(IStatic.IOS_TEMPLATE_JSON_textAPI, '')
+        self.appendAPINameStrIfNotEmpty(arr, IStatic.IOS_TEMPLATE_JSON_textColorAPI)
+        self.appendAPINameStrIfNotEmpty(arr, IStatic.IOS_TEMPLATE_JSON_textAPI)
+        return arr
+
+

@@ -1,47 +1,9 @@
+import os.path
 from iOSTemplateFile.IOSCreate import  ios_static_string as IStatic
-const_color_list = ['KColor_Ct1_85',
-                            'KColor_Ct1_60',
-                            'KColor_Ct1_40',
-                            'KColor_Ct1_20',
-                            'KColor_Ct1_12',
-                            'KColor_Ct2',
-                            'KColor_Ct2_60',
-                            'KColor_Ct3',
-                            'KColor_Ct4',
-                            'KColor_Ct5',
-                            'KColor_Ct6',
-                            'KColor_Ct7',
-                            'KColor_Ct8',
-                            'KColor_Ct10',
-                            'KColor_Ct2_85',
-                            'KColor_C2',
-                            'KColor_C1_03',
-                            'KColor_C1_20',
-                            'KColor_C4',
-                            'KColor_C4_10',
-                            'KColor_C4_06',
-                            'KColor_C5',
-                            'KColor_C3',
-                            'KColor_C6',
-                            'KColor_C7',
-                            'KColor_C7_60',
-                            'KColor_C7_10',
-                            'KColor_C8',
-                            'KColor_C9',
-                            'KColor_C10',
-                            'KColor_Cl2',
-                            'KColor_Cl1_06',
-                            'KColor_Cl1_12',
-                            'KColor_Cl1_40',
-                            'KColor_Cl1_60',
-                            'KColor_Cl4_60',
-                            'KColor_Cl10',
-                            'KColor_C1_85',
-                            'KColor_C1_50',
-                            'KColor_C1_10']
+import iOSTemplateFile.IOSCreate.confgs.ios_config_color as IConfigColor
 
 def is_static_define_color(color:str) -> bool:
-    return color in const_color_list
+    return IConfigColor.getDefineCreateColor(color) is not None
 
 def is_hex_color(color:str):
     return '#' in color or '0x' in color or '0X' in color
@@ -49,46 +11,14 @@ def is_hex_color(color:str):
 def hex_color_ifneeded(color:str):
     if is_hex_color(color) and '#' in color:
         return color[1:]
+    if is_hex_color(color) and '0x' in color or '0x':
+        return color[2:]
     return color
+
 def is_net_api_color(color:str):
-    color_not_none = IStatic.str_is_empty(color) == False
-    # defin =  is_static_define_color(color)
-    # hex = is_hex_color(color)
-    # print(f'[color_not_none:{color_not_none}, defin：{defin}, hex：{hex}], is_net_api_color:{ color_not_none and is_static_define_color(color) == False and is_hex_color(color) == False}:【{color}】')
+    color_not_none = IStatic.str_is_not_empty(color)
     return color_not_none and is_static_define_color(color) == False and is_hex_color(color) == False
 
-class ios_color:
-
-    color_name:str = ''
-    datasource_holder:str = ''
-    datasource:str = ''
-    default_color:str = '0xFAFAFA'
-
-    def __init__(self,color:str,datasource_holder:str='',datasource:str='',default_color:str='0xFAFAFA'):
-        self.color_name = color
-        self.datasource_holder = datasource_holder
-        self.datasource = datasource
-        self.default_color = default_color
-
-    def is_net_api_color(self):
-        return is_net_api_color(self.color_name)
-    def is_empty(self):
-        return IStatic.str_is_empty(self.color_name)
-    def color(self) -> str:
-        color = ''
-        if is_static_define_color(self.color_name):
-            color = self.color_name
-
-        elif is_hex_color(self.color_name):
-            color = f'''
-            KColorFromRGB({hex_color_ifneeded(self.color_name)})
-            '''.strip()
-
-        elif len(self.datasource_holder) > 0 and len(self.datasource) > 0 and is_net_api_color(self.color_name):
-            color = f'''
-            [UIColor zr_colorAndAlphaWithHexString: {self.datasource_holder}.{self.datasource}.{self.color_name}?:@"{self.default_color}"]
-            '''.strip()
-        return color
 
 def convertRGBAToHex(a:int,r:int,g:int,b:int) -> str:
     ll = hex(a)
@@ -118,3 +48,34 @@ def convertHexToRGGA(hex:str) -> ():
     b = int(B16,16) / 255.0
 
     return(a,r,g,b)
+
+class ios_color:
+
+    color_name:str = ''
+    datasource_holder:str = ''
+    datasource:str = ''
+    default_color:str = '0xFAFAFA'
+
+    def __init__(self,color:str,datasource_holder:str='',datasource:str='',default_color:str='0xFAFAFA'):
+        self.color_name = color
+        self.datasource_holder = datasource_holder
+        self.datasource = datasource
+        self.default_color = default_color
+
+    def is_net_api_color(self):
+        return is_net_api_color(self.color_name)
+
+    def is_empty(self):
+        return IStatic.str_is_empty(self.color_name)
+
+    def color(self) -> str:
+        color = ''
+        if is_static_define_color(self.color_name):
+            color = self.color_name
+        elif is_hex_color(self.color_name):
+            color = IConfigColor.getDefineHexColor(self.color_name)
+        elif len(self.datasource_holder) > 0 and len(self.datasource) > 0:
+            apiStr = f'{self.datasource_holder}.{self.datasource}.{self.color_name}'
+            color = IConfigColor.getNetAPIColor(apiStr,self.default_color).strip()
+        return color
+

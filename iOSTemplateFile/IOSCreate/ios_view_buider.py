@@ -1,16 +1,10 @@
 import json
-from iOSTemplateFile.IOSCreate.ios_base_view import ios_base_view as IView
-from iOSTemplateFile.IOSCreate.ios_label import ios_label as ILabel
-from iOSTemplateFile.IOSCreate.ios_button import ios_button as IButton
-from iOSTemplateFile.IOSCreate.ios_image_view import ios_image_view as IImageView
-from iOSTemplateFile.IOSCreate.ios_constraints_maker import ios_constraints_maker as IConstraintsMaker
 from iOSTemplateFile.IOSCreate.ios_view_base_data.ios_view_model import ios_view_model as IViewModel
 from iOSTemplateFile.IOSCreate import ios_class_create as ICreate
 from iOSTemplateFile.IOSCreate import ios_static_string as IStatic
 from iOSTemplateFile.IOSCreate.ios_view_factory import ios_view_factory as IViewFactory
-import json_config_str as JsonConfigStr
 
-import iOSTemplateFile.IOSTemplateRegulars as IRegulars
+import iOSTemplateFile.IOSCreate.IOSTemplateRegulars as IRegulars
 import re
 
 '''
@@ -164,4 +158,4 @@ if __name__ == '__main__':
     # print(ViewM_property_re)
     # View_property_location = ViewM_property_re.end()
     # ViewJson = input('请输入ViewJson')
-    view_json:str = JsonConfigStr.json_config_str()
+    # view_json:str = JsonConfigStr.json_config_str()
