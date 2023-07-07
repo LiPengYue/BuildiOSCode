@@ -41,6 +41,12 @@ key_color_alpha = "alpha"
 
 key_backgroundColor = 'backgroundColor'
 key_textColor = 'textColor'
+key_text = 'text'
+
+key_title = 'title'
+key_select = 'select'
+key_normal = 'normal'
+
 key_borderColor = 'borderColor'
 key_borderWidth = 'borderWidth'
 key_cornerRadius = 'cornerRadius'

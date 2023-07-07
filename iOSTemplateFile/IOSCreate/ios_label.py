@@ -23,6 +23,9 @@ class ios_label(base_text_view):
             s = f'{self.self_ivr_getter()}.textalignment = {self.text_alignment_name};'
             self.array_append_content(s,list)
 
+        if (IStatic.str_is_not_empty(self.title)):
+            s = f'{self.self_ivr_getter()}.text = @"{self.title}";'
+            self.array_append_content(s, list)
         return list
 
     def api_set_title(self):

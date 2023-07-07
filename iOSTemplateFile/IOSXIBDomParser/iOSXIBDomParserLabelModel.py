@@ -8,15 +8,22 @@ class iOSXIBDomParserLabelModel(IOSBaseViewModel):
     fontFamilyName: str = ''
     fontSize: str = 0.0
     fontFamily:str = ''
-
+    text:str = ""
     def parseClassTypeProperty(self) -> str:
         return IDomParserStr.key_UILabel
 
     def subParsePropertys(self):
+        # print(self.nodeElement.toxml())
+        self.parseFont()
+        self.parseText()
+
+    def parseText(self):
+        self.text = self.getElementAttributeValue(self.nodeElement,IDomParserStr.key_text)
+
+    def parseFont(self):
         fonts = self.getElements(self.nodeElement,IDomParserStr.key_fontDescription)
         if fonts is None:
             return
-
         for fontElement in fonts:
             self.fontFamilyName = self.getElementAttributeValue(fontElement,IDomParserStr.key_name)
             self.fontFamily = self.getElementAttributeValue(fontElement,IDomParserStr.key_family)
@@ -28,4 +35,5 @@ class iOSXIBDomParserLabelModel(IOSBaseViewModel):
         jsonDic[IStaticStr.IOS_TEMPLATE_JSON_FontFamily] = self.fontFamily
         jsonDic[IStaticStr.IOS_TEMPLATE_JSON_FontFamilyName] = self.fontFamilyName
         jsonDic[IStaticStr.IOS_TEMPLATE_JSON_FontSize] = self.fontSize
+        jsonDic[IStaticStr.IOS_TEMPLATE_JSON_NormalTextKey] = self.text
         return jsonDic

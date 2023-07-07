@@ -21,7 +21,7 @@ class ios_base_text(base_view):
         font_family_name = self.jsonDic.get(IStatic.IOS_TEMPLATE_JSON_FontFamilyName, '')
         font_size = self.jsonDic.get(IStatic.IOS_TEMPLATE_JSON_FontSize, '')
         text_color = self.jsonDic.get(IStatic.IOS_TEMPLATE_JSON_TextColor, '')
-        self.title = self.jsonDic.get(IStatic.IOS_TEMPLATE_JSON_textAPI, '')
+        self.title = self.jsonDic.get(IStatic.IOS_TEMPLATE_JSON_NormalTextKey, '')
 
         self.font = IFont(font_family,font_family_name, font_size)
         self.text_color = IColor(color=text_color,

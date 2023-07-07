@@ -11,8 +11,8 @@ if __name__ == '__main__':
     主函数：程序入口
     '''
     # path = input('请输入XIB路径:')
-    path = '/Users/lp1/Desktop/XIBDemo/XIBDemo/Demo/ZRXIBView.xib'
-    # path = '/Users/lp1/Desktop/XIBDemo/XIBDemo/Demo/BorderColorXIB.xib'
+    # path = '/Users/lp1/Desktop/XIBDemo/XIBDemo/Demo/ZRXIBView.xib'
+    path = '/Users/lp1/Desktop/XIBDemo/XIBDemo/Demo/BorderColorXIB.xib'
     # 解析xib
     parser = iOSXIBDomParser(path)
     contentDict = parser.viewModel.convertToDic()

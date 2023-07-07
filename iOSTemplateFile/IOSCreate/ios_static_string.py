@@ -82,6 +82,7 @@ IOS_TEMPLATE_JSON_UIViewKey = 'UIView'
 
 IOS_TEMPLATE_JSON_BorderColorKey = 'borderColor'
 IOS_TEMPLATE_JSON_TextColorKey = 'textColor'
+IOS_TEMPLATE_JSON_NormalTextKey = 'normalText'
 IOS_TEMPLATE_JSON_BackgroundColorKey = 'backgroundColor'
 IOS_TEMPLATE_JSON_BorderWidthKey = 'borderWidth'
 IOS_TEMPLATE_JSON_CornerRadiusKey = 'cornerRadius'

@@ -15,12 +15,11 @@ class ios_button(base_text_view):
         '''.lstrip()
 
     def lazy_load(self):
-        str = super(ios_button, self).lazy_load()
+        str = super(ios_button, self).lazy_load().strip()
         str += f'''
-        - (void)click_{self.name} {{
+        - (void)click_{self.propertyName} {{
         
-        }}
-        '''.strip()
+        }}'''
         return str
 
     def append_lazy_load_set_propertys(self) -> [str]:
@@ -28,15 +27,17 @@ class ios_button(base_text_view):
 
         if self.text_color.is_net_api_color() == False and self.text_color.is_empty() == False:
             s = f'[{self.self_ivr_getter()} setTitleColor:{self.text_color.color()} forState:UIControlStateNormal];'
-            self.append_content(s, list)
+            self.array_append_content(s, list)
 
         if self.font.is_empty() == False:
             s = f'{self.self_ivr_getter()}.titleLabel.font = {self.font.font()};'
-            self.append_content(s, list)
+            self.array_append_content(s, list)
+
         append_str = f'''
-            [_{self.name} addTarget:self action:@selector(click_{self.name}) forControlEvents:UIControlEventTouchUpInside];
-        '''.strip()
-        list.append(append_str)
+            [_{self.propertyName} addTarget:self action:@selector(click_{self.propertyName}) forControlEvents:UIControlEventTouchUpInside];
+        '''
+
+        self.array_append_content(append_str, list)
         return list
 
     def append_set_property_data(self) -> [str]:

@@ -4,6 +4,7 @@
 from xml.dom.minidom import parse
 import xml.dom.minidom
 from iOSTemplateFile.IOSXIBDomParser.iOSXIBDomParserLabelModel import iOSXIBDomParserLabelModel as IOSLabelModel
+from iOSTemplateFile.IOSXIBDomParser.iOSXIBDomParserButtonModel import iOSXIBDomParserButtonModel as IOSButtonModel
 from iOSTemplateFile.IOSXIBDomParser.iOSXIBDomParserImageViewModel import iOSXIBDomParserImageViewModel as IOSImageViewModel
 import iOSTemplateFile.IOSCreate.ios_static_string as IStaticStr
 import iOSTemplateFile.IOSXIBDomParser.iOSXIBDomParserStaticStr  as IDomParserStr
@@ -77,6 +78,11 @@ class iOSXIBDomParserViewModel(IOSBaseViewModel):
         if (nodeName == IDomParserStr.key_imageView):
             node = IOSImageViewModel(nodeElement=childNode)
 
+        if (nodeName == IDomParserStr.key_button):
+            node = IOSButtonModel(nodeElement=childNode)
+
+        if (node is None):
+            return
         childNodeId = node.nodeId
 
         if (IStaticStr.str_is_empty(childNodeId) is False and node is not None):

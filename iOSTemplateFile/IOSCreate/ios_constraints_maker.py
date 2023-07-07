@@ -126,6 +126,10 @@ class ios_constaint_item:
         else:
             if constantNum != 0:
                 constantResultStr += f'@({constant}))'
+            elif (IStatic.str_is_not_empty(secondName) and IStatic.str_is_not_empty(self.secondItemId)):
+                constantResultStr += f'{secondName})'
+            else:
+                constantResultStr += f'@({constant}))'
 
         if IStatic.str_is_not_empty(self.priority):
             constantResultStr += f'.priority({self.priority})'
@@ -169,6 +173,7 @@ class ios_constraints_maker:
             @item.getViewOwnerNameCallback
             def ios_constaint_item_callback(viewId:str):
                 return self.getViewOwnerNameCallback_func(viewId)
+
             item.reloadProperty()
             constaintResultList.append(item.constantResultStr)
 

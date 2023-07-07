@@ -124,6 +124,8 @@ class ios_view_factory():
                 return 'self'
             viewDic = self.getViewDicWithViewId(viewId)
             if viewDic is None:
+                viewDic = self.getViewDicWithViewId(self.superFactory().view.id)
+            if viewDic is None:
                 return 'self'
             name = viewDic.get(IStatic.IOS_TEMPLATE_JSON_PropertyNameKey,None)
             if IStatic.str_is_empty(name):
