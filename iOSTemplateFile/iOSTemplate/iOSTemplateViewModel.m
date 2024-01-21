@@ -1,6 +1,6 @@
 
 #import "iOSTemplateViewModel.h"
-#import "iOSTemplateTableViewCell.h"
+#import "iOSTemplateBaseView.h"
 
 @interface iOSTemplateViewModel()
 
@@ -9,6 +9,6 @@
 @implementation iOSTemplateViewModel
 
 - (CGFloat)getContainerViewHeight {
-    return [iOSTemplateTableViewCell getContainerViewHeightWithViewModel:self];
+    return [iOSTemplateBaseView getContainerViewHeightWithViewModel:self];
 }
 @end

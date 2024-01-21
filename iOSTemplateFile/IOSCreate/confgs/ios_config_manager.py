@@ -15,6 +15,7 @@ __rootConfigDefaultStr = '''
 
          "templateViewName": "模板View名",
          "templateBaseViewName": "模板view父类名",
+         "templateViewLayoutPointerName":"模板view承载子视图的view属性名",
 
          "templateViewModelName": "模板ViewModel名",
          "templateBaseViewModelName": "模板ViewModel父类名",

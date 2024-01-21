@@ -7,13 +7,6 @@ from iOSTemplateFile.IOSCreate.ios_view_base_data.ios_color import ios_color as 
 
 class ios_button(base_text_view):
 
-    def set_title(self):
-        if self.title is None:
-            return ''
-        return f'''
-        [{self.self_getter()} setTitle: {self.datasource_getter()}.{self.title} forState: UIControlStateNormal];
-        '''.lstrip()
-
     def lazy_load(self):
         str = super(ios_button, self).lazy_load().strip()
         str += f'''
@@ -25,12 +18,28 @@ class ios_button(base_text_view):
     def append_lazy_load_set_propertys(self) -> [str]:
         list: [str] = super(ios_button, self).append_lazy_load_set_propertys()
 
-        if self.text_color.is_net_api_color() == False and self.text_color.is_empty() == False:
-            s = f'[{self.self_ivr_getter()} setTitleColor:{self.text_color.color()} forState:UIControlStateNormal];'
+        if self.normalTextColor.is_empty() == False:
+            s = f'[{self.self_ivr_getter()} setTitleColor:{self.normalTextColor.color()} forState:UIControlStateNormal];'
+            self.array_append_content(s, list)
+
+        if self.selectTextColor.is_empty() == False:
+            s = f'[{self.self_ivr_getter()} setTitleColor:{self.selectTextColor.color()} forState:UIControlStateSelected];'
             self.array_append_content(s, list)
 
         if self.font.is_empty() == False:
             s = f'{self.self_ivr_getter()}.titleLabel.font = {self.font.font()};'
+            self.array_append_content(s, list)
+
+        if IStatic.str_is_not_empty(self.selectText):
+            s = f'''
+            [{self.self_getter()} setTitle:@"{self.selectText}" forState: UIControlStateSelected];
+            '''.lstrip()
+            self.array_append_content(s,list)
+
+        if IStatic.str_is_not_empty(self.normalText):
+            s = f'''
+            [{self.self_getter()} setTitle:@"{self.normalText}" forState: UIControlStateNormal];
+            '''.lstrip()
             self.array_append_content(s, list)
 
         append_str = f'''
@@ -38,11 +47,6 @@ class ios_button(base_text_view):
         '''
 
         self.array_append_content(append_str, list)
-        return list
-
-    def append_set_property_data(self) -> [str]:
-        list:[str] = []
-        list.append(self.set_title())
         return list
 
     def api_set_append_property_datas(self) -> [str]:

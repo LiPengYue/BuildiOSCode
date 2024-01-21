@@ -1,4 +1,4 @@
-staticFontConfigDic: dict = \
+staticFontConfigDic = \
     {
         "annotation_DefineCreateFont": "根据字体名创建UIFont对象,'#FontSize#' 会替换成float类型",
         "DefineCreateFont": {
@@ -13,7 +13,7 @@ staticFontConfigDic: dict = \
 
 
 def config(dic: dict):
-    staticFontConfigDic = dic
+    staticFontConfigDic.update(dic)
 
 def getDefineCreateFont(familyName:str) ->str:
     return staticFontConfigDic["DefineCreateFont"].get(familyName,None)

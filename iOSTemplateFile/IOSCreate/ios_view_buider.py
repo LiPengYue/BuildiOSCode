@@ -21,6 +21,7 @@ iOSTemplateViewPathKey = 'templateViewPath'
 iOSTemplateViewModelPathKey = 'templateViewModelPath'
 
 iOSTemplateViewNameKey = 'templateViewName'
+templateViewLayoutPointerNameKey = 'templateViewLayoutPointerName'
 iOSTemplateBaseViewNameKey = 'templateBaseViewName'
 iOSTemplateViewModelNameKey = 'templateViewModelName'
 iOSTemplateBaseViewModelNameKey = 'templateBaseViewModelName'
@@ -41,10 +42,11 @@ class ios_view_buider:
         viewModelName = ViewJsonMap.get(IStatic.IOS_TEMPLATE_JSON_ViewModelKey,'')
         if IStatic.str_is_empty(viewModelName):
             viewModelName = ICreate.getClassNameStr('',f"{ViewName}ViewModel",'')
-        BaseViewModelName = ViewJsonMap[IStatic.IOS_TEMPLATE_JSON_BaseViewModelKey]
+        BaseViewModelName = ViewJsonMap[iOSTemplateViewModelNameKey]
         savePath = ViewJsonMap[IStatic.IOS_TEMPLATE_JSON_SavePathKey]
         dataSourceName = ViewJsonMap.get(IStatic.IOS_TEMPLATE_JSON_DataSouceName,'viewModel')
 
+        self_layout_view_holder_pointer_name = ViewJsonMap.get(templateViewLayoutPointerNameKey,'')
         template_ViewName = ViewJsonMap[iOSTemplateViewNameKey]
         template_ViewH_FileName = ViewJsonMap[iOSTemplateViewPathKey] + '/' + template_ViewName + '.h'
         template_ViewM_FileName = ViewJsonMap[iOSTemplateViewPathKey]  + '/' + template_ViewName + '.m'
@@ -79,6 +81,7 @@ class ios_view_buider:
         ViewAddSubViewAppend = ''
         ViewMImportAppend = ''
         rootViewFactory:IViewFactory = IViewFactory(self_holder_pointer_name='self',
+                                                    self_layout_view_holder_pointer_name=self_layout_view_holder_pointer_name,
                                                     datasource=dataSourceName,
                                                     datasource_holder_pointer_name='self',
                                                     viewDic=ViewJsonMap)

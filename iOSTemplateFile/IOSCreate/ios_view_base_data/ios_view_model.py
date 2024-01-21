@@ -50,3 +50,4 @@ class ios_view_model:
 
     def get_properts(self):
         return '\n'.join(self.propertys)
+

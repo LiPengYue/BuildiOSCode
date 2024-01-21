@@ -1,4 +1,5 @@
 
+
 #import "iOSTemplateTableViewCell.h"
 
 @interface iOSTemplateTableViewCell()
@@ -13,7 +14,7 @@
     return self;
 }
 
-- (void)didSetBaseViewModel:(ZRRentBaseViewModel *)baseViewModel {
+- (void)didSetBaseViewModel:(iOSTemplateTableBaseViewModel *)baseViewModel {
     if (![baseViewModel isKindOfClass:iOSTemplateViewModel.class]) {
         return;
     }
@@ -33,7 +34,7 @@
 //<#Regular: getter&&setter #>
 
 // MARK: - containerHeight
-+ (CGFloat)getContainerViewHeightWithViewModel:(ZRRentBaseViewModel *)viewModel {
++ (CGFloat)getContainerViewHeightWithViewModel:(iOSTemplateTableBaseViewModel *)viewModel {
     if (![viewModel isKindOfClass:iOSTemplateViewModel.class]) {
         return CGFLOAT_MIN;
     }

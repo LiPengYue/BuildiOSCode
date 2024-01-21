@@ -12,8 +12,8 @@ staticRootConfigDic = \
         "baseViewModelName": "LPYBaseViewModel",
         "dataSouceName": "viewModel",
 
-        "templateViewName": "iOSTemplateTableViewCell",
-        "templateBaseViewName": "ZRRentBaseTableViewCell",
+        "templateViewName": "iOSTemplateBaseView",
+        "templateBaseViewName": "BaseView",
 
         "templateViewModelName": "iOSTemplateViewModel",
         "templateBaseViewModelName": "iOSTemplateBaseViewModel",
@@ -27,39 +27,7 @@ staticRootConfigDic = \
 
 
 def config(dic: dict):
-    for key,value in dic.items():
-        staticRootConfigDic[key] = value
-
-def setStaticRootConfigDic(
-        template_projectNameKey: str,
-        template_userNameKey: str,
-        template_nickNameKey: str,
-        baseViewModelName: str,
-        templateViewName: str,
-        templateBaseViewName: str,
-        templateViewModelName: str,
-        templateBaseViewModelName: str,
-        templateViewPath: str,
-        templateViewModelPath: str,
-        savePath: str,
-        dataSouceName: str = "viewModel", ):
-    staticRootConfigDic["template_projectNameKey"] = template_projectNameKey
-    staticRootConfigDic["template_userNameKey"] = template_userNameKey
-    staticRootConfigDic["template_nickNameKey"] = template_nickNameKey
-
-    staticRootConfigDic["baseViewModelName"] = baseViewModelName
-    staticRootConfigDic["dataSouceName"] = dataSouceName
-
-    staticRootConfigDic["templateViewName"] = templateViewName
-    staticRootConfigDic["templateBaseViewName"] = templateBaseViewName
-
-    staticRootConfigDic["templateViewModelName"] = templateViewModelName
-    staticRootConfigDic["templateBaseViewModelName"] = templateBaseViewModelName
-
-    staticRootConfigDic["templateViewPath"] = templateViewPath
-    staticRootConfigDic["templateViewModelPath"] = templateViewModelPath
-
-    staticRootConfigDic["savePath"] = savePath
+    staticRootConfigDic.update(dic)
 
 
 def get_template_projectNameKey():

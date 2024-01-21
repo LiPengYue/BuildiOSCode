@@ -20,6 +20,7 @@ class ios_base_view:
     type: str = ''
     #self所有者指针的指针名
     self_holder_pointer_name:str = 'self'
+    self_layout_view_holder_pointer_name: str = ''
 
     #self的基础属性
     background_color: str = ''
@@ -44,11 +45,13 @@ class ios_base_view:
                  self_holder_pointer_name:str,
                  datasource:str,
                  datasource_holder_pointer_name:str,
-                 jsonDic:dict
+                 jsonDic:dict,
+                 self_layout_view_holder_pointer_name: str = ''
                  ):
 
         self.datasource = datasource
         self.self_holder_pointer_name = self_holder_pointer_name
+        self.self_layout_view_holder_pointer_name = self_layout_view_holder_pointer_name
         self.datasource_holder_pointer_name = datasource_holder_pointer_name
 
         self.jsonDic = jsonDic
@@ -89,6 +92,8 @@ class ios_base_view:
 
         if IStatic.str_is_empty(superview_name) == False:
             str += ('.'+superview_name)
+        elif IStatic.str_is_not_empty(self.self_layout_view_holder_pointer_name):
+            str += ('.'+self.self_layout_view_holder_pointer_name)
         str += f' addSubview:self.{self.propertyName}];'
         return str
 

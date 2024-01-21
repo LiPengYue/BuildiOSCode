@@ -39,7 +39,6 @@ def getNetAPIColor(hexApiName: str,defaultColorHex:str):
     apiColorStr = apiColorStr.replace("#colorName#", replaceStr)
     return apiColorStr
 
-
 def getDefineCreateColor(defineColorStr: str):
     DefineCreateColorDic = staticColorConfigDic["DefineCreateColorList"]
     defineColor = DefineCreateColorDic.get(defineColorStr, None)

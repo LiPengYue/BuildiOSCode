@@ -232,6 +232,12 @@ class iOSXIBDomParserBaseViewModel:
             viewModel.constraints[constraintModel.id] = constraintModel
 
     def parseClassTypeProperty(self) -> str:
+        nodeName = self.nodeElement.nodeName
+        if IStaticStr.str_is_not_empty(nodeName):
+            nodeName:str = nodeName.capitalize()
+            nodeName = nodeName.replace('view','View')
+            nodeName = "UI" + nodeName
+            return nodeName
         return IDomParserStr.key_UIView
 
     def getElements(self, element: xml.dom.minidom.Element, key: str) -> xml.dom.minicompat.NodeList:
@@ -249,6 +255,8 @@ class iOSXIBDomParserBaseViewModel:
         return None
 
     def getElementAttributeValue(self, element: xml.dom.minidom.Element, key: str) -> xml.dom.minidom.Element:
+        if (element is None):
+            return None
         if (element is xml.dom.minidom.Element == False):
             return None
         lementValue = element.getAttribute(key)
@@ -258,12 +266,25 @@ class iOSXIBDomParserBaseViewModel:
 
     def getColorWithElement(self, colorElement) -> str:
         # print(colorElement.toxml())
+        type = self.getElementAttributeValue(colorElement, IDomParserStr.key_color_type_systemColor)
+        if (IStaticStr.str_is_not_empty(type)):
+            return IDomParserStr.key_color_type_systemColorPrefix + type
+
         red = self.getElementAttributeValue(colorElement, IDomParserStr.key_color_red)
         green = self.getElementAttributeValue(colorElement, IDomParserStr.key_color_green)
         blue = self.getElementAttributeValue(colorElement, IDomParserStr.key_color_blue)
+        white = self.getElementAttributeValue(colorElement, IDomParserStr.key_color_white)
         alpha = self.getElementAttributeValue(colorElement, IDomParserStr.key_color_alpha)
+        colorSpace = self.getElementAttributeValue(colorElement, IDomParserStr.key_color_colorSpace)
+
         isError = IStaticStr.str_is_empty(red) or IStaticStr.str_is_empty(green) or IStaticStr.str_is_empty(
             alpha) or IStaticStr.str_is_empty(blue)
+
+        if (isError and colorSpace == IDomParserStr.key_color_colorSpace_custom and IStaticStr.str_is_not_empty(white)):
+            red = white
+            green = white
+            blue = white
+            isError = False
 
         if (isError): return ""
 
@@ -296,6 +317,7 @@ class iOSXIBDomParserBaseViewModel:
         jsonDic[IStaticStr.IOS_TEMPLATE_JSON_SubViewsKey] = self.convertSubviewsToDic()
         jsonDic[
             IStaticStr.IOS_TEMPLATE_JSON_UserDefinedRuntimeAttributes] = self.converUserDefinedRuntimeAttributesToDic()
+        jsonDic[IStaticStr.IOS_TEMPLATE_JSON_NormalTextColorKey] = self.textColor
 
         jsonDic[IStaticStr.IOS_TEMPLATE_JSON_APINameKey] = self.apiName
         jsonDic[IStaticStr.IOS_TEMPLATE_JSON_bgColorAPI] = self.bgColorAPI

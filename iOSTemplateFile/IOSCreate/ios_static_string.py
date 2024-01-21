@@ -46,6 +46,7 @@ IOS_TEMPLATE_TYPE_BOOL = 'BOOL'
 IOS_TEMPLATE_TYPE_NSNumber = 'NSNumber'
 IOS_TEMPLATE_TYPE_NSArray = 'NSArray'
 IOS_TEMPLATE_TYPE_NSObject = 'NSObject'
+IOS_TEMPLATE_TYPE_UIColor = 'UIColor'
 
 #NSTextAlignment
 IOS_TEMPLATE_NSTextAlignmentLeft = 'NSTextAlignmentLeft'
@@ -67,9 +68,7 @@ IOS_TEMPLATE_JSON_Relation = 'relation'
 
 #json 解析
 #事例
-'''
-{"template_projectNameKey":"自动生成器","template_userNameKey":"template_userNameKey","template_nickNameKey":"template_userNameKey","viewName":"ZRKeeperCustomerServiceCenterSearchview","ViewModelName":"ZRKeeperCustomerServiceCenterSearchViewModel","SavePathKey":"/Users/lp1/01我的文件/一些资料/code/demo","BaseViewModelName":"ZRKeeperCustomerServiceCenterBaseViewModel","SavePath":"/Users/lp1/01我的文件/一些资料/code/demo","SubViews":[{"PropertyType":"UILabel","PropertyName":"titleLabel","APINameKey":"title","Constraints":{"SuperView":"","ConstraintView_Top":"","ConstraintSpace_Top":"12","ConstraintView_Left":"","ConstraintSpace_Left":"12","ConstraintView_Bottom":"","ConstraintSpace_Bottom":"-12","ConstraintView_Right":"","ConstraintSpace_Right":"-12","Constraint_height":"120","Constraint_width":"110"}},{"PropertyType":"UILabel","PropertyName":"subtitleLabel","APINameKey":"subtitle","Constraints":{"SuperView":"","ConstraintView_Top":"","ConstraintSpace_Top":"12","ConstraintView_Left":"","ConstraintSpace_Left":"12","ConstraintView_Bottom":"","ConstraintSpace_Bottom":"-12","ConstraintView_Right":"","ConstraintSpace_Right":"-12"}},{"PropertyType":"UIImageView","PropertyName":"bgImageView","APINameKey":"bgImage"},{"PropertyType":"UIButton","PropertyName":"bgButton","APINameKey":"buttonText"}]}
-'''
+
 IOS_TEMPLATE_JSON_PropertyTypeKey = 'propertyType'
 IOS_TEMPLATE_JSON_PropertyNameKey = 'propertyName'
 IOS_TEMPLATE_JSON_DataSouceName = 'dataSouceName'
@@ -81,8 +80,10 @@ IOS_TEMPLATE_JSON_ViewKey = 'view'
 IOS_TEMPLATE_JSON_UIViewKey = 'UIView'
 
 IOS_TEMPLATE_JSON_BorderColorKey = 'borderColor'
-IOS_TEMPLATE_JSON_TextColorKey = 'textColor'
+IOS_TEMPLATE_JSON_NormalTextColorKey = 'normalTextColor'
+IOS_TEMPLATE_JSON_SelectTextColorKey = 'selectTextColorKey'
 IOS_TEMPLATE_JSON_NormalTextKey = 'normalText'
+IOS_TEMPLATE_JSON_SelectTextKey = 'selectText'
 IOS_TEMPLATE_JSON_BackgroundColorKey = 'backgroundColor'
 IOS_TEMPLATE_JSON_BorderWidthKey = 'borderWidth'
 IOS_TEMPLATE_JSON_CornerRadiusKey = 'cornerRadius'
@@ -100,7 +101,6 @@ IOS_TEMPLATE_JSON_FontFamily = 'fontFamily'
 IOS_TEMPLATE_JSON_FontFamilyName = 'fontFamilyName'
 IOS_TEMPLATE_JSON_TextAlignment = 'textAlignment'
 IOS_TEMPLATE_JSON_FontSize = 'fontSize'
-IOS_TEMPLATE_JSON_TextColor = 'textColor'
 IOS_TEMPLATE_JSON_ImageName = 'imageName'
 
 IOS_TEMPLATE_JSON_NodeId = 'nodeId'
@@ -114,8 +114,12 @@ IOS_TEMPLATE_JSON_bgColorAPI = 'bgColorAPI'
 IOS_TEMPLATE_JSON_ViewNameKey = 'viewName'
 IOS_TEMPLATE_JSON_ViewModelKey = 'viewModelName'
 IOS_TEMPLATE_JSON_BaseViewModelKey = 'baseViewModelName'
+IOS_TEMPLATE_JSON_LayoutPointerModelKey = 'templateViewLayoutPointerName'
 IOS_TEMPLATE_JSON_SavePathKey = 'savePath'
 IOS_TEMPLATE_JSON_SubViewsKey = 'subViews'
+
+# 匹配字符串
+IOS_TEMPLATE_JSON_Cursem_systemColorPrefix = '<#systemColorPerfix#>'
 
 # 从根目录下开始获取其他路径
 # 获得根路径

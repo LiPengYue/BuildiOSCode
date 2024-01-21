@@ -10,6 +10,7 @@ class ios_view_factory():
 
     viewDic:dict = {}
     self_holder_pointer_name: str = ''
+    self_layout_view_holder_pointer_name: str = ''
     datasource: str = ''
     datasource_holder_pointer_name: str = ''
 
@@ -41,6 +42,7 @@ class ios_view_factory():
 
     def __init__(self,
                  self_holder_pointer_name:str = '',
+                 self_layout_view_holder_pointer_name:str = '',
                  datasource:str = '',
                  datasource_holder_pointer_name:str = '',
                  viewDic:dict = None,
@@ -53,6 +55,7 @@ class ios_view_factory():
         if parentView is not None:
             self.parentView = weakref.ref(parentView)
         self.self_holder_pointer_name = self_holder_pointer_name
+        self.self_layout_view_holder_pointer_name = self_layout_view_holder_pointer_name
         self.datasource = datasource
         self.datasource_holder_pointer_name = datasource_holder_pointer_name
         self.createView()
@@ -66,6 +69,7 @@ class ios_view_factory():
         view:IBaseView
         if propertyType == IStatic.IOS_TEMPLATE_JSON_UILabelKey:
             view = ILabel(self_holder_pointer_name=self.self_holder_pointer_name,
+                          self_layout_view_holder_pointer_name=self.self_layout_view_holder_pointer_name,
                           datasource=self.datasource,
                           datasource_holder_pointer_name=self.datasource_holder_pointer_name,
                           jsonDic=self.viewDic
@@ -73,6 +77,7 @@ class ios_view_factory():
 
         elif propertyType == IStatic.IOS_TEMPLATE_JSON_UIButtonKey:
             view = IButton(self_holder_pointer_name=self.self_holder_pointer_name,
+                           self_layout_view_holder_pointer_name=self.self_layout_view_holder_pointer_name,
                            datasource=self.datasource,
                            datasource_holder_pointer_name=self.datasource_holder_pointer_name,
                            jsonDic=self.viewDic
@@ -80,12 +85,14 @@ class ios_view_factory():
 
         elif propertyType == IStatic.IOS_TEMPLATE_JSON_UIImageViewKey:
             view = IImageView(self_holder_pointer_name=self.self_holder_pointer_name,
+                              self_layout_view_holder_pointer_name=self.self_layout_view_holder_pointer_name,
                               datasource=self.datasource,
                               datasource_holder_pointer_name=self.datasource_holder_pointer_name,
                               jsonDic=self.viewDic
                               )
         else:
             view = IBaseView(self.self_holder_pointer_name,
+                             self_layout_view_holder_pointer_name = self.self_layout_view_holder_pointer_name,
                              datasource=self.datasource,
                              datasource_holder_pointer_name=self.datasource_holder_pointer_name,
                              jsonDic=self.viewDic)
@@ -103,6 +110,7 @@ class ios_view_factory():
                 self_holder_pointer_name=self.self_holder_pointer_name,
                 datasource=self.datasource,
                 datasource_holder_pointer_name=self.datasource_holder_pointer_name,
+                self_layout_view_holder_pointer_name = self.self_layout_view_holder_pointer_name,
                 parentView=self.view,
                 viewDic=value,
                 superFactory=self
@@ -115,35 +123,28 @@ class ios_view_factory():
 
     def createConstraintsMaker(self):
         self.constraintsMaker = IConstraintsMaker(self.viewDic)
+
         @self.constraintsMaker.getViewOwnerNameCallback
-        def getViewOwnerNameCallback(viewId:str) -> str:
-            # viewDic = self.getViewDicWithViewId(viewId)
-            # if viewDic is None:
-                # print(viewId)
+        def getViewOwnerNameCallback(viewId: str) -> str:
+            def appendSuffix(owner:str) -> str:
+                result:str = owner
+                if IStatic.str_is_not_empty(self.self_layout_view_holder_pointer_name):
+                    result += f'.{self.self_layout_view_holder_pointer_name}'
+                return result
+
+            owner = self.self_holder_pointer_name
             if self.getRootFactory().view.id == viewId:
-                return 'self'
+                return appendSuffix(owner)
             viewDic = self.getViewDicWithViewId(viewId)
             if viewDic is None:
                 viewDic = self.getViewDicWithViewId(self.superFactory().view.id)
             if viewDic is None:
-                return 'self'
-            name = viewDic.get(IStatic.IOS_TEMPLATE_JSON_PropertyNameKey,None)
+                return appendSuffix(owner)
+            name = viewDic.get(IStatic.IOS_TEMPLATE_JSON_PropertyNameKey, None)
             if IStatic.str_is_empty(name):
-                return 'self'
-            return f'self.{name}'
+                return appendSuffix(owner)
 
-            # if viewId == self.view.id:
-            #     if self.superFactory is None:
-            #         return 'self'
-            #     return f'self.{self.view.propertyName}'
-            # subview = self.subViews.get(viewId, None)
-            # if subview is not None:
-            #     return f'self.{subview.propertyName}'
-            #
-            # if self.superFactory().view.id == viewId:
-            #     if self.superFactory().superFactory is None:
-            #         return 'self'
-            #     return self.superFactory().view.propertyName
+            return f'{owner}.{name}'
 
         self.constraintsMaker.reload_propertys()
 

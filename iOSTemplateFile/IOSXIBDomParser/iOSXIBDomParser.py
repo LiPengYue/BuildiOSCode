@@ -33,6 +33,5 @@ class iOSXIBDomParser:
 
 if __name__ == '__main__':
 
-    parser = iOSXIBDomParser("/Users/lp1/Desktop/XIBDemo/XIBDemo/Demo/ZRXIBView.xib")
+    parser = iOSXIBDomParser("输入你的代码路径")
     print(parser.viewModel.convertToJson())
-    parser.parse("/Users/lp1/Desktop/XIB/XIB/ZRXIBView.xib")

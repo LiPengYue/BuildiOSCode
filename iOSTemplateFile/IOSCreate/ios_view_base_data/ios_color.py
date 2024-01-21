@@ -2,6 +2,15 @@ import os.path
 from iOSTemplateFile.IOSCreate import  ios_static_string as IStatic
 import iOSTemplateFile.IOSCreate.confgs.ios_config_color as IConfigColor
 
+def is_system_color(color:str) -> bool:
+    return IStatic.IOS_TEMPLATE_JSON_Cursem_systemColorPrefix in color
+
+def get_system_color_name(color:str) -> str:
+    result = color
+    if is_system_color(color):
+        result =  color.replace(IStatic.IOS_TEMPLATE_JSON_Cursem_systemColorPrefix, "《注意iOS版本兼容》")
+    return result
+
 def is_static_define_color(color:str) -> bool:
     return IConfigColor.getDefineCreateColor(color) is not None
 
@@ -50,7 +59,7 @@ def convertHexToRGGA(hex:str) -> ():
     return(a,r,g,b)
 
 class ios_color:
-
+    system_color_name:str = ""
     color_name:str = ''
     datasource_holder:str = ''
     datasource:str = ''
@@ -70,7 +79,9 @@ class ios_color:
 
     def color(self) -> str:
         color = ''
-        if is_static_define_color(self.color_name):
+        if is_system_color(self.color_name):
+            color = IStatic.IOS_TEMPLATE_TYPE_UIColor + f'.{get_system_color_name(self.color_name)}'
+        elif is_static_define_color(self.color_name):
             color = self.color_name
         elif is_hex_color(self.color_name):
             color = IConfigColor.getDefineHexColor(self.color_name)

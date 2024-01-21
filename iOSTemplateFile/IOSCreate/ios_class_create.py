@@ -94,10 +94,10 @@ def getPropertyWithValue(property_value,property_name:str,default):
         property_type = IStatic.IOS_TEMPLATE_PROPERTY_copy + ' ' + IStatic.IOS_TEMPLATE_TYPE_NSString + ' *'
 
     if isinstance(property_value, float):
-        property_type = IStatic.IOS_TEMPLATE_PROPERTY_assign + ' ' + IStatic.IOS_TEMPLATE_TYPE_CGFloat
+        property_type = IStatic.IOS_TEMPLATE_PROPERTY_assign + ' ' + IStatic.IOS_TEMPLATE_TYPE_CGFloat + ' '
 
     if isinstance(property_value, bool):
-        property_type = IStatic.IOS_TEMPLATE_PROPERTY_assign + ' ' + IStatic.IOS_TEMPLATE_TYPE_BOOL
+        property_type = IStatic.IOS_TEMPLATE_PROPERTY_assign + ' ' + IStatic.IOS_TEMPLATE_TYPE_BOOL + ' '
 
     if isinstance(property_value, int):
         property_type = IStatic.IOS_TEMPLATE_PROPERTY_assign + ' ' + IStatic.IOS_TEMPLATE_TYPE_NSInteger + ' '

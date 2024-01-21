@@ -6,8 +6,10 @@ from iOSTemplateFile.IOSCreate import  ios_static_string as IStatic
 
 class ios_base_text(base_view):
     font:IFont
-    text_color:IColor
-    title: str = ''
+    normalTextColor:IColor
+    normalText: str = ''
+    selectTextColor: IColor
+    selectText: str = ''
     text_alignment_name:str = ''
 
     #api
@@ -20,13 +22,18 @@ class ios_base_text(base_view):
         font_family = self.jsonDic.get(IStatic.IOS_TEMPLATE_JSON_FontFamily, '')
         font_family_name = self.jsonDic.get(IStatic.IOS_TEMPLATE_JSON_FontFamilyName, '')
         font_size = self.jsonDic.get(IStatic.IOS_TEMPLATE_JSON_FontSize, '')
-        text_color = self.jsonDic.get(IStatic.IOS_TEMPLATE_JSON_TextColor, '')
-        self.title = self.jsonDic.get(IStatic.IOS_TEMPLATE_JSON_NormalTextKey, '')
+        normalTextColor = self.jsonDic.get(IStatic.IOS_TEMPLATE_JSON_NormalTextColorKey, '')
+        self.normalText = self.jsonDic.get(IStatic.IOS_TEMPLATE_JSON_NormalTextKey, '')
+        selectTextColor = self.jsonDic.get(IStatic.IOS_TEMPLATE_JSON_SelectTextColorKey, '')
+        self.selectText = self.jsonDic.get(IStatic.IOS_TEMPLATE_JSON_SelectTextKey, '')
 
         self.font = IFont(font_family,font_family_name, font_size)
-        self.text_color = IColor(color=text_color,
-                                 datasource=self.datasource,
-                                 datasource_holder=self.datasource_holder_pointer_name)
+        self.normalTextColor = IColor(normalTextColor,
+                                      self.datasource_holder_pointer_name,
+                                      self.datasource)
+        self.selectTextColor = IColor(selectTextColor,
+                                      self.datasource_holder_pointer_name,
+                                      self.datasource)
 
     def apiNames(self) -> [str]:
         arr:[str] = []

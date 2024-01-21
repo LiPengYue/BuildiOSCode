@@ -82,7 +82,8 @@ class iOSXIBDomParserViewModel(IOSBaseViewModel):
             node = IOSButtonModel(nodeElement=childNode)
 
         if (node is None):
-            return
+            # return
+            node = iOSXIBDomParserViewModel(nodeElement=childNode)
         childNodeId = node.nodeId
 
         if (IStaticStr.str_is_empty(childNodeId) is False and node is not None):

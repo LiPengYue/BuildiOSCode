@@ -29,7 +29,7 @@ class iOSXIBConstraintModel:
         if self.nodeElement is None:
             print('self.nodeList: none')
             return
-        self.relation = self.getDomElementAttribute(IOSXIBDomStaticStr.key_relation)
+
         self.firstItem = self.getDomElementAttribute(IOSXIBDomStaticStr.key_firstItem)
         self.firstAttribute = self.getDomElementAttribute(IOSXIBDomStaticStr.key_firstAttribute)
         self.secondItem = self.getDomElementAttribute(IOSXIBDomStaticStr.key_secondItem)
@@ -38,6 +38,10 @@ class iOSXIBConstraintModel:
         self.id = self.getDomElementAttribute(IOSXIBDomStaticStr.key_id)
         self.priority = self.getDomElementAttribute(IOSXIBDomStaticStr.key_priority)
         self.symbolic = self.getDomElementAttribute(IOSXIBDomStaticStr.key_symbolic)
+        self.relation = self.getDomElementAttribute(IOSXIBDomStaticStr.key_relation)
+        if (self.firstAttribute == "trailing"):
+            self.constant = f'-{self.constant}'
+
 
     def getDomElementAttribute(self,key:str):
         return self.getElementAttributeValue(self.nodeElement, key)

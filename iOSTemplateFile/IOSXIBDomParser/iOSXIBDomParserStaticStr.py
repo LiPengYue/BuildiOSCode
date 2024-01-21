@@ -37,15 +37,21 @@ key_color = "color"
 key_color_red = "red"
 key_color_green = "green"
 key_color_blue = "blue"
+key_color_white = "white"
 key_color_alpha = "alpha"
+key_color_type_systemColor = 'systemColor'
+key_color_type_systemColorPrefix = '<#systemColorPerfix#>'
+key_color_colorSpace = 'colorSpace'
+key_color_colorSpace_custom = 'custom'
 
 key_backgroundColor = 'backgroundColor'
 key_textColor = 'textColor'
 key_text = 'text'
 
 key_title = 'title'
-key_select = 'select'
+key_selected = 'selected'
 key_normal = 'normal'
+key_state = 'state'
 
 key_borderColor = 'borderColor'
 key_borderWidth = 'borderWidth'

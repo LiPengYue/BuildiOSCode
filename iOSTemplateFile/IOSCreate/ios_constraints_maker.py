@@ -25,6 +25,9 @@ _bottom = 'bottom'
 _str_make:str = 'make'
 _str_equalTo:str = 'equalTo'
 _str_lessThanOrEqual:str = 'lessThanOrEqual'
+_str_greaterThanOrEqual:str = 'greaterThanOrEqual'
+
+_str_lessThanOrEqualTo:str = 'lessThanOrEqualTo'
 _str_greaterThanOrEqualTo:str = 'greaterThanOrEqualTo'
 
 
@@ -74,13 +77,16 @@ class ios_constaint_item:
         if IStatic.str_is_empty(attri): return ''
         if attri == _trailing: return _right
         if attri == _leading: return _left
+        if attri == _str_lessThanOrEqual: return _str_lessThanOrEqualTo
+        if attri == _str_greaterThanOrEqual: return _str_greaterThanOrEqualTo
+
         return attri
 
     def setupRelation(self):
         if IStatic.str_is_empty(self.relationOrigin):
             self.relation = _str_equalTo
         else:
-            self.relation = self.relationOrigin
+            self.relation = self.convertAttribute(self.relationOrigin)
 
     def reloadProperty(self):
         self.firstItemName = self.getViewOwnerNameCallback_func(self.firstItemId)
@@ -96,9 +102,11 @@ class ios_constaint_item:
         constantNum:float = 0.0
         constant:str = ''
         if IStatic.str_is_not_empty(constantOrigin) and len(constantOrigin) > 0:
+            if len(constantOrigin) == 1 and constantOrigin == '-':
+                constantOrigin += '0'
             constantNum = float(constantOrigin)
-            if firstAttribute == _right or firstAttribute == _bottom:
-                constantNum = -constantNum
+            # if firstAttribute == _right or firstAttribute == _bottom:
+            #     constantNum = -constantNum
 
         if round(constantNum) == constantNum:
             constant = f'{round(constantNum)}'

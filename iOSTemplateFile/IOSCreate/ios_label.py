@@ -10,8 +10,8 @@ class ios_label(base_text_view):
     def append_lazy_load_set_propertys(self) -> [str]:
         list:[str] = super(ios_label, self).append_lazy_load_set_propertys()
 
-        if self.text_color.is_empty() == False:
-            s = f'_{self.propertyName}.textColor = {self.text_color.color()}';
+        if self.normalTextColor.is_empty() == False:
+            s = f'_{self.propertyName}.textColor = {self.normalTextColor.color()}';
             self.array_append_content(s,list)
 
         if self.font.is_empty() is False:
@@ -20,15 +20,17 @@ class ios_label(base_text_view):
             self.array_append_content(s,list)
 
         if IStatic.str_is_empty(self.text_alignment_name) == False:
-            s = f'{self.self_ivr_getter()}.textalignment = {self.text_alignment_name};'
+            s = f'{self.self_ivr_getter()}.textAlignment = {self.text_alignment_name};'
             self.array_append_content(s,list)
 
-        if (IStatic.str_is_not_empty(self.title)):
-            s = f'{self.self_ivr_getter()}.text = @"{self.title}";'
+        if (IStatic.str_is_not_empty(self.normalText)):
+            s = f'{self.self_ivr_getter()}.text = @"{self.normalText}";'
             self.array_append_content(s, list)
         return list
 
     def api_set_title(self):
+        if IStatic.str_is_empty(self.api_text):
+            return ''
         return f'{self.self_getter()}.text = {self.api_set_viewModelPropertyGetter(self.api_text)};'
 
     def api_set_titleColor(self):

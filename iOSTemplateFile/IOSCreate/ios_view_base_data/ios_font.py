@@ -12,7 +12,7 @@ class ios_font:
         self.createFontStr = self.font()
 
     def is_empty(self) -> bool:
-        return IStatic.str_is_empty(self.familyName) or IStatic.str_is_empty(self.size) or IStatic.str_is_empty(self.createFontStr)
+        return IStatic.str_is_empty(self.familyName) or IStatic.str_is_empty(self.size)
 
     def font(self):
         if self.is_empty():
